@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test</title>
+    <style>
+        audio {
+            display: none;
+        }
+
+        select {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="about.html">About</a>
+    <audio controls preload="auto" id="mario-mp3">
+        <source src="./assets/audio/mario_sound.mp3" type="audio/mp3">
+        Your browser does not suppor the audio element.
+    </audio>
+    <audio controls preload="auto" id="spongebob-mp3">
+        <source src="./assets/audio/spongebob-fail.mp3" type="audio/mp3">
+        Your browser does not suppor the audio element.
+    </audio>
+    <!-- <label for="image-select">Choose a character:</label> -->
+    <select id="image-select" aria-label="Choose an option">
+        <option value="" disabled selected>Select an image</option>
+        <option value="mario1">Mario</option>
+        <option value="spongebob1">SpongeBob</option>
+    </select>
+    <img alt="player image" id="player-image" src="" height="100" width="100">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // cache the select element and the img element
+            const imageSelect = document.getElementById('image-select');
+            const playerImg = document.getElementById('player-image');
+            // cache all individual audio players
+            const marioAudio = document.getElementById('mario-mp3');
+            const spongeAudio = document.getElementById('spongebob-mp3');
+            // cache an array of all audio players
+            const audioPlayers = document.querySelectorAll('audio');
+            // cache all image srcs
+            const marioSrc = "./assets/images/mario.jpg";
+            const spongeSrc = "./assets/images/SpongeBob.webp";
+
+            let loadedAudioCount = 0;
+            audioPlayers.forEach(player => {
+                player.hasBeenPlayed = false;
+                player.addEventListener('canplay', function () {
+
+                    loadedAudioCount++;
+                    player.style.display = "block";
+                    console.log(player.hasBeenPlayed);
+                    if (loadedAudioCount === audioPlayers.length) {
+                        imageSelect.style.display = "block";
+                        audioPlayers.forEach(player => {
+                            // player.style.display = "none";
+                        })
+                    }
+                })
+            })
+            imageSelect.addEventListener('change', function () {
+                // stop all other audio
+                audioPlayers.forEach(player => {
+                    // let hasBeenPlayed=false;
+                    // if (player.hasBeenPlayed === true) {
+
+                    player.pause();
+                    player.currentTime = 0; // reset all audio to the start
+                    player.hasBeenPlayed = false;
+                    // }
+                    console.log(player.hasBeenPlayed);
+                })
+                // if (this.value === "mario1") {
+                //     playerImg.src = marioSrc;
+                //     marioAudio.play();
+                // }
+                // if (this.value === "spongebob1") {
+                //     playerImg.src = spongeSrc;
+                //     spongeAudio.play();
+                // }
+                switch (this.value) {
+                    case "mario1":
+                        playerImg.src = marioSrc;
+                        marioAudio.hasBeenPlayed = true;
+                        marioAudio.play();
+                        break;
+                    case "spongebob1":
+                        playerImg.src = spongeSrc;
+                        marioAudio.hasBeenPlayed = true;
+                        spongeAudio.play();
+                        break;
+                }
+            })
+        });
+    </script>
+
+</body>
+
+</html>
